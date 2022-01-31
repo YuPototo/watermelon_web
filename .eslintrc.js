@@ -20,7 +20,7 @@ module.exports = {
     rules: {
         semi: ['error', 'never'],
     },
-    ignorePatterns: ['.eslintrc.js'],
+    ignorePatterns: ['.eslintrc.js', '*config.js', ],
     settings: {
         react: {
             version: 'detect',
