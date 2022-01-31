@@ -1,5 +1,8 @@
 import React from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
+
+import Header from './features/header/Header'
+
 import Home from './pages/home/Home'
 import Login from './pages/login/Login'
 import NoMatch from './pages/noMatch/NoMatch'
@@ -8,6 +11,7 @@ import Signup from './pages/signup/Signup'
 function App() {
     return (
         <BrowserRouter>
+            <Header />
             <Switch>
                 <Route exact path="/">
                     <Home />

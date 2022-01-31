@@ -1,5 +1,10 @@
 import React from 'react'
 
 export default function Login() {
-    return <div>this is login page</div>
+    return (
+        <div>
+            <h1>登录</h1>
+            <div></div>
+        </div>
+    )
 }
