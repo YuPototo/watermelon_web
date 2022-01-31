@@ -2,5 +2,25 @@
     "css.validate": false,
     "editor.quickSuggestions": {
         "strings": true
-      }
+    },
+    "workbench.colorCustomizations": {
+        "activityBar.activeBackground": "#40040c",
+        "activityBar.activeBorder": "#115a06",
+        "activityBar.background": "#40040c",
+        "activityBar.foreground": "#e7e7e7",
+        "activityBar.inactiveForeground": "#e7e7e799",
+        "activityBarBadge.background": "#115a06",
+        "activityBarBadge.foreground": "#e7e7e7",
+        "sash.hoverBorder": "#40040c",
+        "statusBar.background": "#100103",
+        "statusBar.foreground": "#e7e7e7",
+        "statusBarItem.hoverBackground": "#40040c",
+        "statusBarItem.remoteBackground": "#100103",
+        "statusBarItem.remoteForeground": "#e7e7e7",
+        "titleBar.activeBackground": "#100103",
+        "titleBar.activeForeground": "#e7e7e7",
+        "titleBar.inactiveBackground": "#10010399",
+        "titleBar.inactiveForeground": "#e7e7e799"
+    },
+    "peacock.color": "#100103"
 }
