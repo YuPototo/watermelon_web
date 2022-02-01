@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import { useHistory } from 'react-router-dom'
+import Button from '../../components/Button'
 import { useLoginMutation } from '../../features/auth/authService'
 
 export default function Login() {
@@ -53,13 +54,13 @@ export default function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                     ></input>
                 </div>
-                <button
+                <Button
                     type="submit"
                     disabled={isLoading}
                     data-testid="submit-btn"
                 >
                     登录
-                </button>
+                </Button>
             </form>
         </div>
     )

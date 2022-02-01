@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 import toast from 'react-hot-toast'
 
 import { useSignupMutation } from '../../features/auth/authService'
+import Button from '../../components/Button'
 
 export default function Signup() {
     const [userName, setUsername] = useState('')
@@ -54,9 +55,9 @@ export default function Signup() {
                         onChange={(e) => setPassword(e.target.value)}
                     ></input>
                 </div>
-                <button type="submit" disabled={isLoading}>
+                <Button type="submit" disabled={isLoading}>
                     创建账号
-                </button>
+                </Button>
             </form>
         </div>
     )
