@@ -1,5 +1,6 @@
 import React from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { Toaster } from 'react-hot-toast'
 
 import Header from './features/header/Header'
 
@@ -11,6 +12,8 @@ import Signup from './pages/signup/Signup'
 function App() {
     return (
         <BrowserRouter>
+            <Toaster />
+
             <Header />
             <Switch>
                 <Route exact path="/">

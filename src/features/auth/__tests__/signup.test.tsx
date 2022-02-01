@@ -3,8 +3,22 @@ import userEvent from '@testing-library/user-event'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 
-import { render, screen, waitForElementToBeRemoved } from '../../../test_utils'
+import { render, screen } from '../../../test_utils'
 import App from '../../../App'
+
+Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: jest.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(), // Deprecated
+        removeListener: jest.fn(), // Deprecated
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+    })),
+})
 
 const userName = 'some_user'
 
@@ -48,9 +62,13 @@ test('user registers a new account', async () => {
     expect(await screen.findByText(/正在创建用户/i)).toBeInTheDocument()
 
     // 成功创建后：loading 提示会消失
-    await waitForElementToBeRemoved(() => screen.queryByText(/正在创建用户/i))
+    // * react-hot-toast 的 bug：在 jsDOM 里无法正常 dismiss
+    // await waitForElementToBeRemoved(() => screen.queryByText(/正在创建用户/i))
 
-    // Header 改变
+    // after success response: show success toast
+    expect(await screen.findByText(`欢迎，${userName}`)).toBeInTheDocument()
+
+    // after success response: header should change
     expect(
         screen.queryByRole('button', { name: /注册/i })
     ).not.toBeInTheDocument()
@@ -64,7 +82,7 @@ test('user registers a new account', async () => {
     expect(await screen.findByText(/this is home page/i)).toBeInTheDocument()
 })
 
-test('userName taken', async () => {
+test('server respond error', async () => {
     server.use(
         rest.post('/users', (req, res, ctx) => {
             return res(
@@ -88,6 +106,6 @@ test('userName taken', async () => {
 
     userEvent.click(screen.getByRole('button', { name: '创建账号' }))
 
-    // 浏览器出现错误信息
+    // 出现错误信息
     expect(await screen.findByText(/该用户名已被注册/i)).toBeInTheDocument()
 })

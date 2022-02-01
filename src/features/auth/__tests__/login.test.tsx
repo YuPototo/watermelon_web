@@ -1,9 +1,43 @@
 import React from 'react'
 
-import { render, fireEvent, screen } from '../../../test_utils'
+import { render, screen } from '../../../test_utils'
 import App from '../../../App'
+import userEvent from '@testing-library/user-event'
+import { rest } from 'msw'
+import { setupServer } from 'msw/node'
 
-test('user login', async () => {
+Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: jest.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(), // Deprecated
+        removeListener: jest.fn(), // Deprecated
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+    })),
+})
+
+const userName = 'some_user'
+
+const handlers = [
+    rest.post('/users/login', (req, res, ctx) => {
+        const data = { user: { userName }, token: 'testToken' }
+        return res(ctx.json(data), ctx.delay(150))
+    }),
+]
+
+const server = setupServer(...handlers)
+
+beforeAll(() => server.listen())
+
+afterEach(() => server.resetHandlers())
+
+afterAll(() => server.close())
+
+test('user logins', async () => {
     render(<App />)
 
     // 显示“注册”按钮和“登录”按钮
@@ -11,8 +45,65 @@ test('user login', async () => {
     expect(screen.getByText(/登录/i)).toBeInTheDocument()
 
     // 点击“登录”按钮后，进入 login 页面
-    fireEvent.click(screen.getByRole('button', { name: /登录/i }))
+    userEvent.click(screen.getByRole('button', { name: /登录/i }))
     const heading = screen.getByRole('heading', { level: 1 })
     expect(heading).toBeInTheDocument()
     expect(heading.textContent).toBe('登录')
+
+    // 输入用户名、密码，并提交
+    const userNameInput = screen.getByLabelText('用户名')
+    userEvent.type(userNameInput, userName)
+
+    const passwordInput = screen.getByLabelText('密码')
+    userEvent.type(passwordInput, 'some_password')
+
+    userEvent.click(screen.getByTestId('submit-btn'))
+
+    // 等待 res 过程中：loading
+    expect(await screen.findByText(/正在登录/i)).toBeInTheDocument()
+
+    // 成功创建后：loading 提示会消失
+    // * react-hot-toast 的 bug：在 jsDOM 里无法正常 dismiss
+    // await waitForElementToBeRemoved(() => screen.queryByText(/正在登录/i))
+
+    // 成功创建后：出现 success 提示
+    expect(await screen.findByText(`欢迎，${userName}`)).toBeInTheDocument()
+
+    // Header 改变
+    expect(
+        screen.queryByRole('button', { name: /注册/i })
+    ).not.toBeInTheDocument()
+    expect(
+        screen.queryByRole('button', { name: /登录/i })
+    ).not.toBeInTheDocument()
+    expect(screen.getByText(userName)).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /登出/i })).toBeInTheDocument()
+
+    // 返回首页（这个 story 之后要修改）
+    expect(await screen.findByText(/this is home page/i)).toBeInTheDocument()
+})
+
+test('user login failure', async () => {
+    server.use(
+        rest.post('/users/login', (req, res, ctx) => {
+            return res(ctx.status(401), ctx.json({ message: '某个服务器错误' }))
+        })
+    )
+
+    render(<App />)
+
+    // 点击“登录”按钮后，进入 login 页面
+    userEvent.click(screen.getByRole('button', { name: /登录/i }))
+
+    // 输入用户名、密码，并提交
+    const userNameInput = screen.getByLabelText('用户名')
+    userEvent.type(userNameInput, userName)
+
+    const passwordInput = screen.getByLabelText('密码')
+    userEvent.type(passwordInput, 'some_password')
+
+    userEvent.click(screen.getByTestId('submit-btn'))
+
+    // 出现错误信息
+    expect(await screen.findByText(/某个服务器错误/i)).toBeInTheDocument()
 })

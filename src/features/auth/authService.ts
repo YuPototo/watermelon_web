@@ -24,7 +24,14 @@ export const authApi = emptySplitApi.injectEndpoints({
                 body: arg,
             }),
         }),
+        login: build.mutation<AuthResponse, AuthRequest>({
+            query: (arg) => ({
+                url: 'users/login',
+                method: 'POST',
+                body: arg,
+            }),
+        }),
     }),
 })
 
-export const { useSignupMutation } = authApi
+export const { useSignupMutation, useLoginMutation } = authApi

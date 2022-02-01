@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
+
+import toast from 'react-hot-toast'
+
 import { useSignupMutation } from '../../features/auth/authService'
 
 export default function Signup() {
@@ -7,23 +10,24 @@ export default function Signup() {
     const [password, setPassword] = useState('')
 
     const history = useHistory()
-    const [signup, { isLoading: isCreating, error }] = useSignupMutation()
+    const [signup, { isLoading }] = useSignupMutation()
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault()
-
+        const toastId = toast.loading('正在创建用户...')
         try {
             await signup({ userName, password }).unwrap()
+            toast.success(`欢迎，${userName}`)
             history.push('/')
         } catch (err) {
-            console.log(err)
+            // console.log(err) // 在 middleware 里处理了
+        } finally {
+            toast.dismiss(toastId)
         }
     }
 
     return (
         <div>
-            {error && <div>{JSON.stringify(error)}</div>}
-            {isCreating && <div>正在创建用户...</div>}
             <h1>创建账号</h1>
             <form onSubmit={handleSubmit}>
                 <div>
@@ -34,6 +38,7 @@ export default function Signup() {
                         value={userName}
                         placeholder="输入一个名字"
                         autoFocus
+                        disabled={isLoading}
                         onChange={(e) => setUsername(e.target.value)}
                     ></input>
                 </div>
@@ -45,10 +50,13 @@ export default function Signup() {
                         name="password"
                         value={password}
                         placeholder="输入密码"
+                        disabled={isLoading}
                         onChange={(e) => setPassword(e.target.value)}
                     ></input>
                 </div>
-                <button type="submit">创建账号</button>
+                <button type="submit" disabled={isLoading}>
+                    创建账号
+                </button>
             </form>
         </div>
     )

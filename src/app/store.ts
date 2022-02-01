@@ -1,17 +1,19 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 import { emptySplitApi } from './api'
 
-import counterReducer from '../features/counter/counterSlice'
 import authReducer from '../features/auth/authSlice'
+import { rtkQueryErrorLogger } from './middleware/queryErrorLog'
 
 export const store = configureStore({
     reducer: {
         [emptySplitApi.reducerPath]: emptySplitApi.reducer,
-        counter: counterReducer,
         auth: authReducer,
     },
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(emptySplitApi.middleware),
+        getDefaultMiddleware().concat(
+            emptySplitApi.middleware,
+            rtkQueryErrorLogger
+        ),
 })
 
 export type AppDispatch = typeof store.dispatch

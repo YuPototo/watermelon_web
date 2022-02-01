@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 
 import authReducer from './features/auth/authSlice'
 import { emptySplitApi } from './app/api'
+import { rtkQueryErrorLogger } from './app/middleware/queryErrorLog'
 
 const reducer = {
     [emptySplitApi.reducerPath]: emptySplitApi.reducer,
@@ -24,7 +25,10 @@ function render(
             reducer,
             preloadedState,
             middleware: (getDefaultMiddleware) =>
-                getDefaultMiddleware().concat(emptySplitApi.middleware),
+                getDefaultMiddleware().concat(
+                    emptySplitApi.middleware,
+                    rtkQueryErrorLogger
+                ),
         }),
         ...renderOptions
     } = {}
