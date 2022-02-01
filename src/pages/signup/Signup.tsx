@@ -5,6 +5,7 @@ import toast from 'react-hot-toast'
 
 import { useSignupMutation } from '../../features/auth/authService'
 import Button from '../../components/Button'
+import TextInput from '../../components/TextInput'
 
 export default function Signup() {
     const [userName, setUsername] = useState('')
@@ -17,23 +18,27 @@ export default function Signup() {
         event.preventDefault()
         const toastId = toast.loading('正在创建用户...')
         try {
-            await signup({ userName, password }).unwrap()
+            const data = await signup({ userName, password }).unwrap()
             toast.success(`欢迎，${userName}`)
+            localStorage.setItem('token', data.token)
+            localStorage.setItem('userName', data.user.userName)
             history.push('/')
         } catch (err) {
             // console.log(err) // 在 middleware 里处理了
         } finally {
-            toast.dismiss(toastId)
+            toast.remove(toastId) // 如果使用 toast.dismiss()，RTL 会出问题
         }
     }
 
     return (
         <div>
-            <h1>创建账号</h1>
-            <form onSubmit={handleSubmit}>
+            <h1 className="mb-4 text-lg text-gray-700 lg:text-xl">创建账号</h1>
+            <form className="space-y-4" onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="username">用户名</label>
-                    <input
+                    <label className="inline-block w-16" htmlFor="username">
+                        用户名
+                    </label>
+                    <TextInput
                         id="username"
                         name="username"
                         value={userName}
@@ -41,11 +46,13 @@ export default function Signup() {
                         autoFocus
                         disabled={isLoading}
                         onChange={(e) => setUsername(e.target.value)}
-                    ></input>
+                    />
                 </div>
                 <div>
-                    <label htmlFor="password">密码</label>
-                    <input
+                    <label className="inline-block w-16" htmlFor="password">
+                        密码
+                    </label>
+                    <TextInput
                         type="password"
                         id="password"
                         name="password"
@@ -53,7 +60,7 @@ export default function Signup() {
                         placeholder="输入密码"
                         disabled={isLoading}
                         onChange={(e) => setPassword(e.target.value)}
-                    ></input>
+                    />
                 </div>
                 <Button type="submit" disabled={isLoading}>
                     创建账号

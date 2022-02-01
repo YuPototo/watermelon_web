@@ -21,17 +21,24 @@ Object.defineProperty(window, 'matchMedia', {
 })
 
 const userName = 'some_user'
+const token = 'testToken'
 
 const handlers = [
     rest.post('/users', (req, res, ctx) => {
-        const data = { user: { userName }, token: 'testToken' }
+        const data = { user: { userName }, token }
         return res(ctx.json(data), ctx.delay(150))
     }),
 ]
 
 const server = setupServer(...handlers)
 
-beforeAll(() => server.listen())
+beforeAll(() => {
+    server.listen()
+})
+
+beforeEach(() => {
+    localStorage.clear()
+})
 
 afterEach(() => server.resetHandlers())
 
@@ -77,6 +84,10 @@ test('user registers a new account', async () => {
     ).not.toBeInTheDocument()
     expect(screen.getByText(userName)).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /登出/i })).toBeInTheDocument()
+
+    // save token to localStorage
+    expect(localStorage.getItem('token')).toBe(token)
+    expect(localStorage.getItem('userName')).toBe(userName)
 
     // 返回首页（这个 story 之后要修改）
     expect(await screen.findByText(/this is home page/i)).toBeInTheDocument()

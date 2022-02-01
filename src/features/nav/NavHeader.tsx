@@ -30,21 +30,16 @@ function AuthArea(props: { className?: string }) {
             {isLogin ? (
                 <>
                     <span>{userName}</span>
-                    <button onClick={() => dispatch(logout())}>登出</button>
+                    <Button outline onClick={() => dispatch(logout())}>
+                        登出
+                    </Button>
                 </>
             ) : (
                 <>
-                    <Button
-                        color="green"
-                        outline
-                        onClick={() => history.push('/login')}
-                    >
+                    <Button outline onClick={() => history.push('/login')}>
                         登录
                     </Button>
-                    <Button
-                        color="green"
-                        onClick={() => history.push('/signup')}
-                    >
+                    <Button onClick={() => history.push('/signup')}>
                         注册
                     </Button>
                 </>
