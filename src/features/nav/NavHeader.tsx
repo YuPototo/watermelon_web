@@ -49,9 +49,14 @@ function AuthArea(props: { className?: string }) {
 }
 
 export default function Header() {
+    const history = useHistory()
+
     return (
         <div className="flex bg-gray-200 px-4 py-2">
             <Brand />
+            <Button onClick={() => history.push('/communities')}>
+                社区列表
+            </Button>
             <AuthArea className="ml-auto" />
         </div>
     )

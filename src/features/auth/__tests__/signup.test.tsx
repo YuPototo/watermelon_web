@@ -3,8 +3,9 @@ import userEvent from '@testing-library/user-event'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 
-import { render, screen } from '../../../test_utils'
+import { render, screen, waitForElementToBeRemoved } from '../../../test_utils'
 import App from '../../../App'
+import { commonHandlers } from '../../../testUtils/serverHandlers'
 
 Object.defineProperty(window, 'matchMedia', {
     writable: true,
@@ -30,7 +31,7 @@ const handlers = [
     }),
 ]
 
-const server = setupServer(...handlers)
+const server = setupServer(...handlers, ...commonHandlers)
 
 beforeAll(() => {
     server.listen()
@@ -70,7 +71,7 @@ test('user registers a new account', async () => {
 
     // 成功创建后：loading 提示会消失
     // * react-hot-toast 的 bug：在 jsDOM 里无法正常 dismiss
-    // await waitForElementToBeRemoved(() => screen.queryByText(/正在创建用户/i))
+    await waitForElementToBeRemoved(() => screen.queryByText(/正在创建用户/i))
 
     // after success response: show success toast
     expect(await screen.findByText(`欢迎，${userName}`)).toBeInTheDocument()

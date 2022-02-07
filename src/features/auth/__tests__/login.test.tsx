@@ -1,10 +1,11 @@
 import React from 'react'
 
-import { render, screen } from '../../../test_utils'
+import { render, screen, waitForElementToBeRemoved } from '../../../test_utils'
 import App from '../../../App'
 import userEvent from '@testing-library/user-event'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
+import { commonHandlers } from '../../../testUtils/serverHandlers'
 
 Object.defineProperty(window, 'matchMedia', {
     writable: true,
@@ -30,7 +31,7 @@ const handlers = [
     }),
 ]
 
-const server = setupServer(...handlers)
+const server = setupServer(...handlers, ...commonHandlers)
 beforeAll(() => {
     server.listen()
 })
@@ -69,8 +70,7 @@ test('user logins', async () => {
     expect(await screen.findByText(/正在登录/i)).toBeInTheDocument()
 
     // 成功创建后：loading 提示会消失
-    // * react-hot-toast 的 bug：在 jsDOM 里无法正常 dismiss
-    // await waitForElementToBeRemoved(() => screen.queryByText(/正在登录/i))
+    await waitForElementToBeRemoved(() => screen.queryByText(/正在登录/i))
 
     // 成功创建后：出现 success 提示
     expect(await screen.findByText(`欢迎，${userName}`)).toBeInTheDocument()
