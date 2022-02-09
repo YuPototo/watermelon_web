@@ -34,15 +34,27 @@ const POSTS = [
         id: 1,
         title: 'community title 1',
         body: 'community body 1',
-        userId: 1,
-        communityId: 1,
+        user: {
+            id: 1,
+            userName: 'test_user',
+        },
+        community: {
+            id: 1,
+            name: 'test_community',
+        },
     },
     {
         id: 2,
         title: 'community title 2',
         body: null,
-        userId: 1,
-        communityId: 1,
+        user: {
+            id: 1,
+            userName: 'test_user',
+        },
+        community: {
+            id: 1,
+            name: 'test_community',
+        },
     },
 ]
 
@@ -106,4 +118,7 @@ test('tourist visit community page', async () => {
     expect(await screen.findByText(/community title 1/)).toBeInTheDocument()
     expect(await screen.findByText(/community body 1/)).toBeInTheDocument()
     expect(await screen.findByText(/community title 2/)).toBeInTheDocument()
+
+    // Post Card：不显示社区名称
+    expect(screen.queryByText(/test_community/i)).not.toBeInTheDocument()
 })

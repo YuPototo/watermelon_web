@@ -45,8 +45,14 @@ const handlers = [
                             id: 2,
                             title: 'test title 2',
                             body: 'test body 2',
-                            userId: 1,
-                            communityId: 1,
+                            user: {
+                                id: 1,
+                                userName: 'test_user',
+                            },
+                            community: {
+                                id: 1,
+                                name: 'test_community',
+                            },
                         },
                     ],
                 })
@@ -64,8 +70,14 @@ const handlers = [
                             id: 3,
                             title: 'test title 3',
                             body: 'test body 3',
-                            userId: 1,
-                            communityId: 1,
+                            user: {
+                                id: 1,
+                                userName: 'test_user',
+                            },
+                            community: {
+                                id: 1,
+                                name: 'test_community',
+                            },
                         },
                     ],
                 })
@@ -81,8 +93,14 @@ const handlers = [
                         id: 1,
                         title: 'test title 1',
                         body: 'test body 1',
-                        userId: 1,
-                        communityId: 1,
+                        user: {
+                            id: 1,
+                            userName: 'test_user',
+                        },
+                        community: {
+                            id: 1,
+                            name: 'test_community',
+                        },
                     },
                 ],
             })

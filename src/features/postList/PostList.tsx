@@ -136,7 +136,7 @@ export default function PostList({ isCommunity = false, communityId }: Props) {
             {isLoading && <div>加载中...</div>}
             {posts && (
                 <>
-                    <Posts posts={posts} />
+                    <Posts posts={posts} showCommunity={!isCommunity} />
                     <Pager
                         hasNext={hasNext}
                         hasPrev={hasPrev}

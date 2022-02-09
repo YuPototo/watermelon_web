@@ -2,13 +2,15 @@ import React from 'react'
 import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from '../../app/hooks'
 import { Post } from '../../types/Post'
+import PostCard from '../post/PostCard'
 import { setPost } from '../post/postSlice'
 
 interface Props {
     posts: Post[]
+    showCommunity: boolean
 }
 
-export default function Posts({ posts }: Props) {
+export default function Posts({ posts, showCommunity }: Props) {
     const dispatch = useAppDispatch()
     const history = useHistory()
     const handleClickPostCard = (post: Post) => {
@@ -23,8 +25,7 @@ export default function Posts({ posts }: Props) {
                     key={post.id}
                     onClick={() => handleClickPostCard(post)}
                 >
-                    <div>{post.title}</div>
-                    <div>{post.body}</div>
+                    <PostCard post={post} showCommunity={showCommunity} />
                 </div>
             ))}
         </div>

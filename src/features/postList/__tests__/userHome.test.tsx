@@ -35,15 +35,27 @@ const USER_POSTS = [
         id: 1,
         title: 'user title 1',
         body: 'user post body 1',
-        userId: 1,
-        communityId: 1,
+        user: {
+            id: 1,
+            userName: 'test_user',
+        },
+        community: {
+            id: 1,
+            name: 'test_community',
+        },
     },
     {
         id: 2,
         title: 'user title 2',
         body: null,
-        userId: 1,
-        communityId: 1,
+        user: {
+            id: 1,
+            userName: 'test_user',
+        },
+        community: {
+            id: 1,
+            name: 'test_community',
+        },
     },
 ]
 
@@ -52,8 +64,14 @@ const ALL_POSTS = [
         id: 3,
         title: 'all title 1',
         body: 'all post body 1',
-        userId: 1,
-        communityId: 1,
+        user: {
+            id: 1,
+            userName: 'test_user',
+        },
+        community: {
+            id: 1,
+            name: 'test_community',
+        },
     },
 ]
 

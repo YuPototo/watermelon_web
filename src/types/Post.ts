@@ -4,8 +4,14 @@ export interface Post {
     body: string
     createdAt: string
     updatedAt: string
-    userId: number
-    communityId: number
+    user: {
+        id: number
+        userName: string
+    }
+    community: {
+        id: number
+        name: string
+    }
 }
 
 export interface PostList {

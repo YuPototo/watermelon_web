@@ -34,15 +34,27 @@ const POSTS = [
         id: 1,
         title: 'test title 1',
         body: 'test body 1',
-        userId: 1,
-        communityId: 1,
+        user: {
+            id: 1,
+            userName: 'test_user',
+        },
+        community: {
+            id: 1,
+            name: 'test_community',
+        },
     },
     {
         id: 2,
         title: 'test title 2',
         body: null,
-        userId: 1,
-        communityId: 1,
+        user: {
+            id: 1,
+            userName: 'test_user',
+        },
+        community: {
+            id: 1,
+            name: 'test_community',
+        },
     },
 ]
 
@@ -83,6 +95,9 @@ test('tourist visit home page', async () => {
     expect(await screen.findByText(/test title 1/)).toBeInTheDocument()
     expect(await screen.findByText(/test body 1/)).toBeInTheDocument()
     expect(await screen.findByText(/test title 2/)).toBeInTheDocument()
+
+    // Post Card：显示社区名称
+    expect(screen.getAllByText(/test_community/i)).toHaveLength(2)
 })
 
 test('tourist click page title or body to enter post page', async () => {

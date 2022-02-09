@@ -25,7 +25,7 @@ export default function PostPage() {
     return (
         <div>
             {isLoading && <div>加载中...</div>}
-            {post && <PostCard post={post} />}
+            {post && <PostCard post={post} showCommunity={true} />}
         </div>
     )
 }
