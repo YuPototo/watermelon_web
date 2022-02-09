@@ -12,6 +12,7 @@ import NoMatch from './pages/noMatch/NoMatch'
 import Signup from './pages/signup/Signup'
 import CommunityList from './pages/communityList/CommunityList'
 import Community from './pages/community/Community'
+import PostPage from './pages/postPage/PostPage'
 
 function App() {
     const dispatch = useAppDispatch()
@@ -28,6 +29,9 @@ function App() {
                 <Switch>
                     <Route exact path="/">
                         <Home />
+                    </Route>
+                    <Route path="/p/:postId">
+                        <PostPage />
                     </Route>
                     <Route path="/c/:id">
                         <Community />

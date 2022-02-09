@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { render, fireEvent, screen } from '../../../test_utils'
+import { render, fireEvent, screen } from '../../../testUtils/testUtils'
 import App from '../../../App'
 
 const userName = 'testUser'

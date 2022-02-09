@@ -9,6 +9,7 @@ import {
     useJoinMutation,
     useLeaveMutation,
 } from '../../features/communityList/communityService'
+import PostList from '../../features/postList/PostList'
 
 export default function Community() {
     const [isMember, setIsMember] = useState(false)
@@ -64,15 +65,18 @@ export default function Community() {
     return (
         <div>
             <h1>{name}</h1>
-            {isMember ? (
-                <Button onClick={handleLeave} disabled={isLeaving}>
-                    离开
-                </Button>
-            ) : (
-                <Button onClick={handleJoin} disabled={isJoining}>
-                    加入
-                </Button>
-            )}
+            <div>
+                {isMember ? (
+                    <Button onClick={handleLeave} disabled={isLeaving}>
+                        离开
+                    </Button>
+                ) : (
+                    <Button onClick={handleJoin} disabled={isJoining}>
+                        加入
+                    </Button>
+                )}
+            </div>
+            <PostList isCommunity={true} communityId={communityId} />
         </div>
     )
 }

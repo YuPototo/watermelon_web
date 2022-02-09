@@ -7,8 +7,9 @@ import userEvent from '@testing-library/user-event'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 
-import { render, screen } from '../../../../test_utils'
+import { render, screen } from '../../../../testUtils/testUtils'
 import App from '../../../../App'
+import { commonHandlers } from '../../../../testUtils/serverHandlers'
 
 const handlers = [
     rest.get('/communities', (req, res, ctx) => {
@@ -23,7 +24,8 @@ const handlers = [
         )
     }),
 ]
-const server = setupServer(...handlers)
+
+const server = setupServer(...handlers, ...commonHandlers)
 
 beforeAll(() => {
     server.listen()

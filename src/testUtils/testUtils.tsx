@@ -4,13 +4,15 @@ import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 // Import your own reducer
 
-import authReducer from './features/auth/authSlice'
-import { emptySplitApi } from './app/api'
-import { rtkQueryErrorLogger } from './app/middleware/queryErrorLog'
+import authReducer from '../features/auth/authSlice'
+import postReducer from '../features/post/postSlice'
+import { emptySplitApi } from '../app/api'
+import { rtkQueryErrorLogger } from '../app/middleware/queryErrorLog'
 
 const reducer = {
     [emptySplitApi.reducerPath]: emptySplitApi.reducer,
     auth: authReducer,
+    post: postReducer,
 }
 
 function render(

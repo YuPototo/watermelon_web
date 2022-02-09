@@ -1,6 +1,10 @@
 import React from 'react'
 
-import { render, screen, waitForElementToBeRemoved } from '../../../test_utils'
+import {
+    render,
+    screen,
+    waitForElementToBeRemoved,
+} from '../../../testUtils/testUtils'
 import App from '../../../App'
 import userEvent from '@testing-library/user-event'
 import { rest } from 'msw'

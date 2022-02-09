@@ -3,7 +3,11 @@ import userEvent from '@testing-library/user-event'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 
-import { render, screen, waitForElementToBeRemoved } from '../../../test_utils'
+import {
+    render,
+    screen,
+    waitForElementToBeRemoved,
+} from '../../../testUtils/testUtils'
 import App from '../../../App'
 import { commonHandlers } from '../../../testUtils/serverHandlers'
 

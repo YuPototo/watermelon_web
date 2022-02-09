@@ -11,8 +11,9 @@ import {
     render,
     screen,
     waitForElementToBeRemoved,
-} from '../../../../test_utils'
+} from '../../../../testUtils/testUtils'
 import App from '../../../../App'
+import { commonHandlers } from '../../../../testUtils/serverHandlers'
 
 Object.defineProperty(window, 'matchMedia', {
     writable: true,
@@ -47,7 +48,8 @@ const handlers = [
         return res(ctx.json(1), ctx.delay(150))
     }),
 ]
-const server = setupServer(...handlers)
+
+const server = setupServer(...handlers, ...commonHandlers)
 
 const userName = 'testUser'
 const token = 'testToken'
@@ -65,7 +67,7 @@ afterAll(() => {
     server.close()
 })
 
-test('tourist enters community page through communityListPage', async () => {
+test('user joins community', async () => {
     render(<App />)
 
     // 进入社区列表页
