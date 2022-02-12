@@ -63,20 +63,32 @@ export default function Community() {
     }
 
     return (
-        <div>
-            <h1>{name}</h1>
-            <div>
-                {isMember ? (
-                    <Button onClick={handleLeave} disabled={isLeaving}>
-                        离开
-                    </Button>
-                ) : (
-                    <Button onClick={handleJoin} disabled={isJoining}>
-                        加入
-                    </Button>
-                )}
+        <div className="page-container">
+            <div className="rounded bg-white p-4">
+                <h1 className="mb-3 mr-4 inline-block text-xl text-gray-700 md:mb-0 md:inline">
+                    {name}
+                </h1>
+                <div className="inline-block">
+                    {isMember ? (
+                        <Button
+                            outline
+                            onClick={handleLeave}
+                            disabled={isLeaving}
+                        >
+                            离开
+                        </Button>
+                    ) : (
+                        <Button onClick={handleJoin} disabled={isJoining}>
+                            加入
+                        </Button>
+                    )}
+                </div>
             </div>
-            <PostList isCommunity={true} communityId={communityId} />
+            <PostList
+                className="mt-4"
+                isCommunity={true}
+                communityId={communityId}
+            />
         </div>
     )
 }

@@ -43,6 +43,7 @@ export const postListApi = emptySplitApi.injectEndpoints({
                 }
                 return '/posts/me/new' + query
             },
+            providesTags: ['POST_LIST'],
         }),
         getNewPostsByCommunity: build.query<PostListRes, CommunityPostListArgs>(
             {

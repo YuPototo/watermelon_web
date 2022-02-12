@@ -25,7 +25,7 @@ function App() {
             <Toaster />
 
             <Header />
-            <div className="container mx-auto px-4 pt-2">
+            <div className="mx-auto min-h-screen bg-gray-200 px-4 py-4">
                 <Switch>
                     <Route exact path="/">
                         <Home />

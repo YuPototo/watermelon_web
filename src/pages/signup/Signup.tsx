@@ -31,8 +31,8 @@ export default function Signup() {
     }
 
     return (
-        <div>
-            <h1 className="mb-4 text-lg text-gray-700 lg:text-xl">创建账号</h1>
+        <div className="page-container rounded bg-white p-4">
+            <h1 className="mb-4 text-lg text-green-600 lg:text-xl">创建账号</h1>
             <form className="space-y-4" onSubmit={handleSubmit}>
                 <div>
                     <label className="inline-block w-16" htmlFor="username">

@@ -13,20 +13,20 @@ interface Props {
 export default function Posts({ posts, showCommunity }: Props) {
     const dispatch = useAppDispatch()
     const history = useHistory()
-    const handleClickPostCard = (post: Post) => {
+    const handleToPost = (post: Post) => {
         dispatch(setPost(post))
         history.push(`/p/${post.id}`)
     }
     return (
         <div>
             {posts.map((post) => (
-                <div
-                    className="my-4 ml-2"
+                <PostCard
                     key={post.id}
-                    onClick={() => handleClickPostCard(post)}
-                >
-                    <PostCard post={post} showCommunity={showCommunity} />
-                </div>
+                    className="my-4"
+                    post={post}
+                    showCommunity={showCommunity}
+                    onToPost={() => handleToPost(post)}
+                />
             ))}
         </div>
     )

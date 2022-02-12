@@ -52,9 +52,13 @@ export default function Header() {
     const history = useHistory()
 
     return (
-        <div className="flex bg-gray-200 px-4 py-2">
+        <div className="flex px-4 py-2">
             <Brand />
-            <Button onClick={() => history.push('/communities')}>
+            <Button
+                className="ml-4"
+                outline
+                onClick={() => history.push('/communities')}
+            >
                 社区列表
             </Button>
             <AuthArea className="ml-auto" />

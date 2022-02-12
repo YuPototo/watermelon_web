@@ -46,11 +46,16 @@ interface PageParam {
 }
 
 type Props = {
+    className?: string
     isCommunity?: boolean
     communityId?: number
 }
 
-export default function PostList({ isCommunity = false, communityId }: Props) {
+export default function PostList({
+    communityId,
+    className = '',
+    isCommunity = false,
+}: Props) {
     const [rankMethod, setRankMethod] = useState<RankMethod>('new')
     const [pageParam, setPageParam] = useState<PageParam>({})
 
@@ -64,12 +69,12 @@ export default function PostList({ isCommunity = false, communityId }: Props) {
 
     const postListType = getPostListType(isLogin, rankMethod, isCommunity)
 
-    const { data: allNewRes, isFetching: allNewLoading } =
+    const { data: allNewRes, isFetching: allNewFetching } =
         useGetNewPostsByAllQuery(pageParam, {
             skip: postListType !== 'allNew',
         })
 
-    const { data: userNewRes, isFetching: userNewLoading } =
+    const { data: userNewRes, isFetching: userNewFetching } =
         useGetNewPostsByUserQuery(pageParam, {
             skip: postListType !== 'userNew',
         })
@@ -80,7 +85,7 @@ export default function PostList({ isCommunity = false, communityId }: Props) {
         before: pageParam.before,
         after: pageParam.after,
     }
-    const { data: communityNewRes, isFetching: communityNewLoading } =
+    const { data: communityNewRes, isFetching: communityNewFetching } =
         useGetNewPostsByCommunityQuery(communityQueryArg, {
             skip: postListType !== 'communityNew',
         })
@@ -107,36 +112,44 @@ export default function PostList({ isCommunity = false, communityId }: Props) {
         }
     }, [
         postListType,
-        allNewLoading,
-        userNewLoading,
-        communityNewLoading,
+        allNewFetching,
+        userNewFetching,
+        communityNewFetching,
         changePage, // hack: force side effect
     ])
 
-    const isLoading = allNewLoading || userNewLoading || communityNewLoading
+    const isFetching = allNewFetching || userNewFetching || communityNewFetching
 
     const handleClickNext = () => {
         const lastPost = posts[posts.length - 1]
         setPageParam({ after: lastPost.id })
         setChangePage(changePage + 1)
+        window.scrollTo(0, 0)
     }
 
     const handleClickPrev = () => {
         const firstPost = posts[0]
         setPageParam({ before: firstPost.id })
         setChangePage(changePage + 1)
+        window.scrollTo(0, 0)
     }
 
     return (
-        <>
+        <div data-testid="post_list" className={className}>
             <RankMethodPicker
+                rankMethod={rankMethod}
                 pickRankMethod={(picked) => setRankMethod(picked)}
                 showAll={showAllButton(isLogin, isCommunity)}
             />
-            {isLoading && <div>加载中...</div>}
+            {isFetching && (
+                <div className="my-4 rounded bg-white py-2 px-4">加载中...</div>
+            )}
             {posts && (
                 <>
                     <Posts posts={posts} showCommunity={!isCommunity} />
+                    {posts.length === 0 && (
+                        <NoPostHint postListType={postListType} />
+                    )}
                     <Pager
                         hasNext={hasNext}
                         hasPrev={hasPrev}
@@ -145,6 +158,21 @@ export default function PostList({ isCommunity = false, communityId }: Props) {
                     />
                 </>
             )}
-        </>
+        </div>
     )
+}
+
+type NoPostHintProps = {
+    postListType: PostListType
+}
+
+const HINT_TEXT = {
+    allNew: '如果你看到这条信息，说明出 Bug 了',
+    userNew: '你还没有加入社区，请加入一个社区吧',
+    communityNew: '这个社区还没有帖子，发布一个吧',
+}
+
+function NoPostHint({ postListType }: NoPostHintProps) {
+    const hint = HINT_TEXT[postListType]
+    return <div className="mt-2 rounded bg-white p-3">{hint}</div>
 }

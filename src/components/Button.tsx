@@ -7,11 +7,13 @@ interface ButtonProps extends React.ComponentProps<'button'> {
     color?: ButtonColor
     outline?: boolean
     children?: React.ReactNode
+    className?: string
 }
 
 export default function Button({
     color = 'green',
     outline = false,
+    className = '',
     children,
     ...buttonProps
 }: ButtonProps) {
@@ -33,7 +35,8 @@ export default function Button({
             className={clsx(
                 baseStyle,
                 { [`${outlineStyle}`]: outline },
-                colorCSS
+                colorCSS,
+                className
             )}
             {...buttonProps}
         >

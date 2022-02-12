@@ -94,7 +94,7 @@ test('user logins', async () => {
     expect(localStorage.getItem('userName')).toBe(userName)
 
     // 返回首页（这个 story 之后要修改）
-    expect(await screen.findByText(/this is home page/i)).toBeInTheDocument()
+    expect(await screen.findByTestId('post_list')).toBeInTheDocument()
 })
 
 test('user login failure', async () => {

@@ -23,7 +23,7 @@ export default function PostPage() {
     }, [postFromStore, postFromServer])
 
     return (
-        <div>
+        <div className="page-container">
             {isLoading && <div>加载中...</div>}
             {post && <PostCard post={post} showCommunity={true} />}
         </div>

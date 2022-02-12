@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import React from 'react'
 import Button from '../../components/Button'
 
@@ -14,9 +15,19 @@ export default function Pager({
     onClickPrev,
 }: Props) {
     return (
-        <div>
-            {hasPrev && <Button onClick={onClickPrev}>上一页</Button>}
-            {hasNext && <Button onClick={onClickNext}>下一页</Button>}
+        <div className="flex justify-between">
+            <Button
+                className={clsx({ invisible: !hasPrev })}
+                onClick={onClickPrev}
+            >
+                上一页
+            </Button>
+            <Button
+                className={clsx({ invisible: !hasNext })}
+                onClick={onClickNext}
+            >
+                下一页
+            </Button>
         </div>
     )
 }

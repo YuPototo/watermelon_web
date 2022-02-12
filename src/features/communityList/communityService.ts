@@ -25,18 +25,21 @@ export const communityApi = emptySplitApi.injectEndpoints({
         checkIsMember: build.query<boolean, CommunityId>({
             query: (id: CommunityId) => `/communityUser/${id}`,
             transformResponse: (res: CheckIsMemberRes) => res.isMember,
+            providesTags: ['COMMUNITY_MEMBER'],
         }),
         join: build.mutation<void, CommunityId>({
             query: (id: CommunityId) => ({
                 url: `/communityUser/${id}`,
                 method: 'PUT',
             }),
+            invalidatesTags: ['POST_LIST', 'COMMUNITY_MEMBER'],
         }),
         leave: build.mutation<void, CommunityId>({
             query: (id: CommunityId) => ({
                 url: `/communityUser/${id}`,
                 method: 'DELETE',
             }),
+            invalidatesTags: ['POST_LIST', 'COMMUNITY_MEMBER'],
         }),
     }),
 })
