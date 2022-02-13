@@ -1,17 +1,27 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 
 import toast from 'react-hot-toast'
 
 import { useSignupMutation } from '../../features/auth/authService'
 import Button from '../../components/Button'
 import TextInput from '../../components/TextInput'
+import { getSearchTerm } from '../../utils/getSearchTerm'
 
 export default function Signup() {
     const [userName, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
     const history = useHistory()
+    const location = useLocation()
+
+    let fromLocation: string
+    try {
+        fromLocation = getSearchTerm(location.search, 'from')
+    } catch (err) {
+        fromLocation = '/'
+    }
+
     const [signup, { isLoading }] = useSignupMutation()
 
     const handleSubmit = async (event: React.FormEvent) => {
@@ -19,10 +29,12 @@ export default function Signup() {
         const toastId = toast.loading('正在创建用户...')
         try {
             const data = await signup({ userName, password }).unwrap()
-            toast.success(`欢迎，${userName}`)
+            toast.success('注册成功，即将跳转...')
             localStorage.setItem('token', data.token)
             localStorage.setItem('userName', data.user.userName)
-            history.push('/')
+            setTimeout(() => {
+                history.push(fromLocation)
+            }, 1000)
         } catch (err) {
             // console.log(err) // 在 middleware 里处理了
         } finally {
@@ -66,6 +78,18 @@ export default function Signup() {
                     创建账号
                 </Button>
             </form>
+            <div>
+                已有账号？去
+                <Link
+                    className="link"
+                    to={{
+                        pathname: '/login',
+                        search: location.search,
+                    }}
+                >
+                    登录
+                </Link>
+            </div>
         </div>
     )
 }

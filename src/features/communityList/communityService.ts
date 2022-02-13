@@ -1,4 +1,3 @@
-import { ENGINE_METHOD_STORE } from 'constants'
 import { emptySplitApi } from '../../app/api'
 
 type CommunityId = number
@@ -21,6 +20,10 @@ export const communityApi = emptySplitApi.injectEndpoints({
         getCommunities: build.query<Community[], void>({
             query: () => '/communities',
             transformResponse: (res: GetCommunitiesRes) => res.communities,
+        }),
+        getCommunityInfo: build.query<Community, number>({
+            query: (id) => `/communities/${id}`,
+            transformResponse: (res: { community: Community }) => res.community,
         }),
         checkIsMember: build.query<boolean, CommunityId>({
             query: (id: CommunityId) => `/communityUser/${id}`,
@@ -46,6 +49,7 @@ export const communityApi = emptySplitApi.injectEndpoints({
 
 export const {
     useGetCommunitiesQuery,
+    useGetCommunityInfoQuery,
     useCheckIsMemberQuery,
     useJoinMutation,
     useLeaveMutation,

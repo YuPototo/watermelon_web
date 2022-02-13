@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useHistory, useParams } from 'react-router-dom'
 import { useAppSelector } from '../../app/hooks'
 import Button from '../../components/Button'
 import { selectIsLogin } from '../../features/auth/authSlice'
 import {
     useCheckIsMemberQuery,
+    useGetCommunityInfoQuery,
     useJoinMutation,
     useLeaveMutation,
 } from '../../features/communityList/communityService'
@@ -13,17 +14,36 @@ import PostList from '../../features/postList/PostList'
 
 export default function Community() {
     const [isMember, setIsMember] = useState(false)
+    const [name, setName] = useState('')
+
     const location = useLocation()
+    const history = useHistory()
+    const { communityId } = useParams<{ communityId: string }>()
+
     const isLogin = useAppSelector(selectIsLogin)
 
-    const { name, id: communityId } = location.state as {
-        name: string
-        id: number
-    }
+    useEffect(() => {
+        if (location.state) {
+            const name = (location.state as { name: string }).name
+            setName(name)
+        }
+    }, [location.state])
 
-    const { data: isMemberByServer } = useCheckIsMemberQuery(communityId, {
-        skip: !isLogin,
-    })
+    const { data: communityInfo } = useGetCommunityInfoQuery(
+        parseInt(communityId),
+        { skip: location.state !== undefined }
+    )
+
+    useEffect(() => {
+        if (communityInfo) setName(communityInfo.name)
+    }, [communityInfo])
+
+    const { data: isMemberByServer } = useCheckIsMemberQuery(
+        parseInt(communityId),
+        {
+            skip: !isLogin,
+        }
+    )
 
     useEffect(() => {
         if (!isLogin) {
@@ -37,9 +57,21 @@ export default function Community() {
     const [leave, { isLoading: isLeaving }] = useLeaveMutation()
 
     const handleJoin = async () => {
+        if (!isLogin) {
+            const toastId = toast('未登录，即将跳转注册页')
+            setTimeout(() => {
+                history.push({
+                    pathname: '/signup',
+                    search: `?from=${location.pathname}`,
+                })
+                toast.remove(toastId)
+            }, 1000)
+            return
+        }
+
         const toastId = toast.loading('正在加入...')
         try {
-            await join(communityId).unwrap()
+            await join(parseInt(communityId)).unwrap()
             setIsMember(true)
             toast.success('已加入社区')
         } catch (err) {
@@ -50,9 +82,18 @@ export default function Community() {
     }
 
     const handleLeave = async () => {
+        if (!isLogin) {
+            toast('未登录，即将跳转注册页')
+            setTimeout(() => {
+                history.push({ pathname: '/signup' })
+                toast.remove(toastId)
+            }, 1000)
+            return
+        }
+
         const toastId = toast.loading('请稍等...')
         try {
-            await leave(communityId).unwrap()
+            await leave(parseInt(communityId)).unwrap()
             setIsMember(false)
             toast.success('已离开社区')
         } catch (err) {
@@ -87,7 +128,7 @@ export default function Community() {
             <PostList
                 className="mt-4"
                 isCommunity={true}
-                communityId={communityId}
+                communityId={parseInt(communityId)}
             />
         </div>
     )

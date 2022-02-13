@@ -1,15 +1,23 @@
 import React, { useState } from 'react'
 import toast from 'react-hot-toast'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import Button from '../../components/Button'
 import TextInput from '../../components/TextInput'
 import { useLoginMutation } from '../../features/auth/authService'
+import { getSearchTerm } from '../../utils/getSearchTerm'
 
 export default function Login() {
     const [userName, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
     const history = useHistory()
+
+    let fromLocation: string
+    try {
+        fromLocation = getSearchTerm(location.search, 'from')
+    } catch (err) {
+        fromLocation = '/'
+    }
 
     const [login, { isLoading }] = useLoginMutation()
 
@@ -18,10 +26,12 @@ export default function Login() {
         const toastId = toast.loading('正在登录...')
         try {
             const data = await login({ userName, password }).unwrap()
-            toast.success(`欢迎，${userName}`)
+            toast.success('登录成功，即将跳转...')
             localStorage.setItem('token', data.token)
             localStorage.setItem('userName', data.user.userName)
-            history.push('/')
+            setTimeout(() => {
+                history.push(fromLocation)
+            }, 1000)
         } catch (err) {
             // console.log(err) // 在 middleware 里处理了
         } finally {
@@ -69,6 +79,18 @@ export default function Login() {
                     登录
                 </Button>
             </form>
+            <div>
+                没有账号？去
+                <Link
+                    className="link"
+                    to={{
+                        pathname: '/signup',
+                        search: location.search,
+                    }}
+                >
+                    注册
+                </Link>
+            </div>
         </div>
     )
 }

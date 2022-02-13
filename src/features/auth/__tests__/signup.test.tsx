@@ -78,7 +78,7 @@ test('user registers a new account', async () => {
     await waitForElementToBeRemoved(() => screen.queryByText(/正在创建用户/i))
 
     // after success response: show success toast
-    expect(await screen.findByText(`欢迎，${userName}`)).toBeInTheDocument()
+    expect(await screen.findByText('注册成功，即将跳转...')).toBeInTheDocument()
 
     // after success response: header should change
     expect(
@@ -94,7 +94,7 @@ test('user registers a new account', async () => {
     expect(localStorage.getItem('token')).toBe(token)
     expect(localStorage.getItem('userName')).toBe(userName)
 
-    // 返回首页（这个 story 之后要修改）
+    // 返回首页：因为是从首页进入的，所以返回首页
     expect(await screen.findByTestId('post_list')).toBeInTheDocument()
 })
 

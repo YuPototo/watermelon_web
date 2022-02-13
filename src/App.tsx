@@ -13,6 +13,7 @@ import Signup from './pages/signup/Signup'
 import CommunityList from './pages/communityList/CommunityList'
 import Community from './pages/community/Community'
 import PostPage from './pages/postPage/PostPage'
+import CreatePost from './pages/createPost/CreatePost'
 
 function App() {
     const dispatch = useAppDispatch()
@@ -33,7 +34,7 @@ function App() {
                     <Route path="/p/:postId">
                         <PostPage />
                     </Route>
-                    <Route path="/c/:id">
+                    <Route path="/c/:communityId">
                         <Community />
                     </Route>
                     <Route path="/signup">
@@ -44,6 +45,9 @@ function App() {
                     </Route>
                     <Route path="/communities">
                         <CommunityList />
+                    </Route>
+                    <Route path="/createPost">
+                        <CreatePost />
                     </Route>
 
                     <Route path="*">

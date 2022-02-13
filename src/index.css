@@ -6,4 +6,7 @@
     .page-container {
         @apply lg:mx-40 xl:mx-60;
     }
+    .link {
+        @apply text-green-500 underline;
+    }
 }

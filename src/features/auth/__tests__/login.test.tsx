@@ -77,7 +77,7 @@ test('user logins', async () => {
     await waitForElementToBeRemoved(() => screen.queryByText(/正在登录/i))
 
     // 成功创建后：出现 success 提示
-    expect(await screen.findByText(`欢迎，${userName}`)).toBeInTheDocument()
+    expect(await screen.findByText('登录成功，即将跳转...')).toBeInTheDocument()
 
     // Header 改变
     expect(

@@ -13,7 +13,7 @@ export default function CommunityListPage() {
                         <Link
                             className="my-2 block rounded p-2 pl-4 hover:bg-green-100"
                             key={id}
-                            to={{ pathname: `/c/${name}`, state: { name, id } }}
+                            to={{ pathname: `/c/${id}`, state: { name } }}
                         >
                             {name}
                         </Link>

@@ -16,6 +16,8 @@ import { rest } from 'msw'
 import { setupServer } from 'msw/node'
 import { commonHandlers } from '../../../testUtils/serverHandlers'
 
+window.scrollTo = jest.fn()
+
 Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: jest.fn().mockImplementation((query) => ({
@@ -116,10 +118,16 @@ beforeAll(() => {
 
 afterEach(() => server.resetHandlers())
 
-afterAll(() => server.close())
+afterAll(() => {
+    server.close()
+    jest.clearAllMocks()
+})
 
 test('should display next page', async () => {
     render(<App />)
+
+    // 一开始,"下一页"按钮不显示
+    expect(screen.queryByText('下一页')).not.toBeInTheDocument()
 
     // 显示下一页按钮
     expect(await screen.findByText('下一页')).toBeInTheDocument()

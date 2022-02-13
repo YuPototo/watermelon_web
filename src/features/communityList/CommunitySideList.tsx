@@ -19,7 +19,7 @@ export default function CommunitySideList({ className = '' }: Props) {
                     <Link
                         className="block rounded py-1 pl-2 text-gray-500 hover:bg-green-100 hover:text-gray-800"
                         key={id}
-                        to={{ pathname: `/c/${name}`, state: { name, id } }}
+                        to={{ pathname: `/c/${id}`, state: { name } }}
                     >
                         {name}
                     </Link>
