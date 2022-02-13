@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import CommunitySideList from '../../features/communityList/CommunitySideList'
+import CommunitySideList from '../../features/community/CommunitySideList'
 import PostList from '../../features/postList/PostList'
 
 export default function Home() {

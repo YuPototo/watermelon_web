@@ -83,9 +83,9 @@ test('user logins', async () => {
     expect(
         screen.queryByRole('button', { name: /注册/i })
     ).not.toBeInTheDocument()
-    expect(
+    await waitForElementToBeRemoved(() =>
         screen.queryByRole('button', { name: /登录/i })
-    ).not.toBeInTheDocument()
+    )
     expect(screen.getByText(userName)).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /登出/i })).toBeInTheDocument()
 

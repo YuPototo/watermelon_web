@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { useGetCommunitiesQuery } from '../../features/communityList/communityService'
+import { useGetCommunitiesQuery } from '../../features/community/communityService'
 
 export default function CommunityListPage() {
     const { data } = useGetCommunitiesQuery()

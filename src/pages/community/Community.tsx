@@ -9,7 +9,7 @@ import {
     useGetCommunityInfoQuery,
     useJoinMutation,
     useLeaveMutation,
-} from '../../features/communityList/communityService'
+} from '../../features/community/communityService'
 import PostList from '../../features/postList/PostList'
 
 export default function Community() {
