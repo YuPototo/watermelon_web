@@ -1,5 +1,7 @@
 import clsx from 'clsx'
 import React from 'react'
+import { Link } from 'react-router-dom'
+import { useAppSelector } from '../../app/hooks'
 import { Post } from '../../types/Post'
 
 type Props = {
@@ -15,6 +17,9 @@ export default function PostCard({
     className,
     onToPost,
 }: Props) {
+    const username = useAppSelector((state) => state.auth.userName)
+    const isAuthor = post.user.userName === username
+
     const handleClickPost = () => {
         if (onToPost) {
             onToPost(post)
@@ -45,6 +50,16 @@ export default function PostCard({
                 {post.title}
             </h1>
             <div className="text-sm text-gray-700">{post.body}</div>
+            <div className="mt-2 text-xs text-gray-700">
+                {isAuthor && (
+                    <Link
+                        className=" hover:cursor-pointer hover:text-green-700"
+                        to={{ pathname: '/editPost', state: { post } }}
+                    >
+                        编辑
+                    </Link>
+                )}
+            </div>
         </div>
     )
 }

@@ -3,14 +3,12 @@ import toast from 'react-hot-toast'
 import { useHistory, useLocation } from 'react-router-dom'
 import { useAppSelector } from '../../app/hooks'
 import { selectIsLogin } from '../../features/auth/authSlice'
-import { useGetCommunitiesQuery } from '../../features/community/communityService'
-import SelectForumMenu from './SelectForumMenu'
 import TextareaAutosize from 'react-textarea-autosize'
-import { useCreatePostMutation } from '../../features/post/postService'
+import { Post } from '../../types/Post'
 import Button from '../../components/Button'
+import { useUpdatePostMutation } from '../../features/post/postService'
 
-export default function CreatePost() {
-    const [communityId, setCommuntyId] = useState<number | undefined>(undefined)
+export default function EditPost() {
     const [title, setTitle] = useState('')
     const [body, setBody] = useState('')
 
@@ -21,44 +19,38 @@ export default function CreatePost() {
         if (!isLogin) {
             toast.error('请登录后再发帖')
             setTimeout(() => {
-                history.replace('signup?from=createPost')
+                history.replace('signup?from=editPost')
             }, 1000)
         }
     }, [isLogin])
 
-    const location = useLocation<{ communityId?: number }>()
-
+    const location = useLocation<{ post: Post }>()
     useEffect(() => {
-        if (location.state?.communityId) {
-            setCommuntyId(location.state.communityId)
-        }
+        const post = location.state.post
+        setTitle(post.title)
+        setBody(post.body)
     }, [location])
 
-    const { data: communities } = useGetCommunitiesQuery()
-    const [createPost, { isLoading }] = useCreatePostMutation()
+    const [updatePost, { isLoading }] = useUpdatePostMutation()
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault()
 
-        if (!communityId) {
-            toast.error('需要选择社区')
-            return
-        }
-
-        const loadingToastId = toast.loading('正在提交...')
-
+        const loadingToastId = toast.loading('等待中...')
+        const postId = location.state.post.id
         try {
-            const post = await createPost({
-                title,
+            await updatePost({
+                postId,
                 body,
-                communityId,
+                title,
             }).unwrap()
-            toast.success('发布成功')
+            toast.success('更新成功')
+
             setTimeout(() => {
-                history.push(`p/${post.id}`)
+                history.push(`/p/${postId}`)
             }, 1000)
         } catch (err) {
-            // console.log(err) // 在 middleware 里处理了
+            // console.log(err)
         } finally {
             toast.dismiss(loadingToastId)
         }
@@ -66,18 +58,10 @@ export default function CreatePost() {
 
     return (
         <div className="page-container bg-white p-4">
-            <h1 className="m-2 mb-4 text-lg text-green-600">发布帖子</h1>
-            <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-                {communities ? (
-                    <SelectForumMenu
-                        communityId={communityId}
-                        communities={communities}
-                        selectCommunity={setCommuntyId}
-                    />
-                ) : (
-                    <div className="text-red-500">社区列表加载失败</div>
-                )}
+            <h1 className="m-2 mb-4 text-lg text-green-600">编辑帖子</h1>
 
+            <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+                <div>{location.state.post.community.name}</div>
                 <TextareaAutosize
                     className="text-input"
                     id="title"

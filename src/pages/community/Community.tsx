@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { useLocation, useHistory, useParams } from 'react-router-dom'
+import { useLocation, useHistory, useParams, Link } from 'react-router-dom'
 import { useAppSelector } from '../../app/hooks'
 import Button from '../../components/Button'
 import { selectIsLogin } from '../../features/auth/authSlice'
@@ -104,32 +104,48 @@ export default function Community() {
     }
 
     return (
-        <div className="page-container">
-            <div className="rounded bg-white p-4">
-                <h1 className="mb-3 mr-4 inline-block text-xl text-gray-700 md:mb-0 md:inline">
-                    {name}
-                </h1>
-                <div className="inline-block">
-                    {isMember ? (
-                        <Button
-                            outline
-                            onClick={handleLeave}
-                            disabled={isLeaving}
-                        >
-                            离开
+        <div className="page-container md:grid md:grid-cols-12 md:gap-4">
+            <div className="col-span-9">
+                <div className="rounded bg-white p-4">
+                    <h1 className="mb-3 mr-4 inline-block text-xl text-gray-700 md:mb-0 md:inline">
+                        {name}
+                    </h1>
+                    <div className="inline-block">
+                        {isMember ? (
+                            <Button
+                                outline
+                                onClick={handleLeave}
+                                disabled={isLeaving}
+                            >
+                                离开
+                            </Button>
+                        ) : (
+                            <Button onClick={handleJoin} disabled={isJoining}>
+                                加入
+                            </Button>
+                        )}
+                    </div>
+                </div>
+                <PostList
+                    className="mt-4"
+                    isCommunity={true}
+                    communityId={parseInt(communityId)}
+                />
+            </div>
+            <div className="hidden  md:col-span-3 md:block">
+                <div className="rounded bg-white p-4">
+                    <Link
+                        to={{
+                            pathname: '/createPost',
+                            state: { communityId: parseInt(communityId) },
+                        }}
+                    >
+                        <Button outline className="w-full">
+                            发帖
                         </Button>
-                    ) : (
-                        <Button onClick={handleJoin} disabled={isJoining}>
-                            加入
-                        </Button>
-                    )}
+                    </Link>
                 </div>
             </div>
-            <PostList
-                className="mt-4"
-                isCommunity={true}
-                communityId={parseInt(communityId)}
-            />
         </div>
     )
 }

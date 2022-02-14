@@ -14,6 +14,7 @@ import CommunityList from './pages/communityList/CommunityList'
 import Community from './pages/community/Community'
 import PostPage from './pages/postPage/PostPage'
 import CreatePost from './pages/createPost/CreatePost'
+import EditPost from './pages/EditPost/EditPost'
 
 function App() {
     const dispatch = useAppDispatch()
@@ -48,6 +49,9 @@ function App() {
                     </Route>
                     <Route path="/createPost">
                         <CreatePost />
+                    </Route>
+                    <Route path="/editPost">
+                        <EditPost />
                     </Route>
 
                     <Route path="*">
