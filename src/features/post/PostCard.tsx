@@ -50,10 +50,16 @@ export default function PostCard({
                 {post.title}
             </h1>
             <div className="text-sm text-gray-700">{post.body}</div>
-            <div className="mt-2 text-xs text-gray-700">
+            <div className="mt-2 flex gap-4 text-xs text-gray-700">
+                <Link
+                    className=" hover:cursor-pointer hover:text-green-700"
+                    to={{ pathname: `/p/${post.id}` }} // todo
+                >
+                    回复{post.commentCount > 0 && `(${post.commentCount})`}
+                </Link>
                 {isAuthor && (
                     <Link
-                        className=" hover:cursor-pointer hover:text-green-700"
+                        className="hover:cursor-pointer hover:text-green-700"
                         to={{ pathname: '/editPost', state: { post } }}
                     >
                         编辑

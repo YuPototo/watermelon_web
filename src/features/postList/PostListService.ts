@@ -31,6 +31,7 @@ export const postListApi = emptySplitApi.injectEndpoints({
                 }
                 return '/posts/all/new' + query
             },
+            providesTags: ['POST_LIST'],
         }),
         getNewPostsByUser: build.query<PostListRes, PostListArgs>({
             query: (args) => {
@@ -57,6 +58,7 @@ export const postListApi = emptySplitApi.injectEndpoints({
                     }
                     return `/posts/community/${args.communityId}/new` + query
                 },
+                providesTags: ['POST_LIST'],
             }
         ),
     }),

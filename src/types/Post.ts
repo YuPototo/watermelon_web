@@ -4,6 +4,7 @@ export interface Post {
     body: string
     createdAt: string
     updatedAt: string
+    commentCount: number
     user: {
         id: number
         userName: string

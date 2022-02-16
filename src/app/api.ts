@@ -3,7 +3,7 @@ import { RootState } from './store'
 
 export const emptySplitApi = createApi({
     reducerPath: 'api',
-    tagTypes: ['POST_LIST', 'COMMUNITY_MEMBER', 'POST'],
+    tagTypes: ['POST_LIST', 'COMMUNITY_MEMBER', 'POST', 'COMMENT_TREE'],
     baseQuery: fetchBaseQuery({
         baseUrl: process.env.REACT_APP_API_URL || '',
         prepareHeaders: (headers, { getState }) => {
