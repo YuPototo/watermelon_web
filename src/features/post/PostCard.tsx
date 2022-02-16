@@ -49,7 +49,12 @@ export default function PostCard({
             >
                 {post.title}
             </h1>
-            <div className="text-sm text-gray-700">{post.body}</div>
+            <div
+                className="text-sm text-gray-700"
+                style={{ whiteSpace: 'pre-line' }}
+            >
+                {post.body}
+            </div>
             <div className="mt-2 flex gap-4 text-xs text-gray-700">
                 <Link
                     className=" hover:cursor-pointer hover:text-green-700"

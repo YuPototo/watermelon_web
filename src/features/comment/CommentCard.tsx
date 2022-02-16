@@ -29,7 +29,7 @@ export default function CommentCard({ comment, className }: Props) {
                     onFinish={() => setIsEditing(false)}
                 />
             ) : (
-                <div>{comment.body}</div>
+                <div style={{ whiteSpace: 'pre-line' }}>{comment.body}</div>
             )}
 
             {isAuthor && (
